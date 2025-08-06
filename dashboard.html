@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Capita - Dashboard</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(to bottom right, #000000, #000428, #001f33);
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    header {
+      z-index: 2;
+      position: relative;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #00ffcc;
+      font-size: 1.8rem;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #00ffcc30;
+    }
+
+    header .user-icon {
+      width: 35px;
+      height: 35px;
+      background: #00ffcc;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00bfff;
+    }
+
+    .quote-banner {
+      margin: 30px auto;
+      text-align: center;
+      color: #ffffffcc;
+      font-size: 1.4rem;
+      z-index: 2;
+      position: relative;
+      text-shadow: 0 0 10px #00bfff50;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 20px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #00ffcc40;
+      border-radius: 15px;
+      width: 280px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00ffcc;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 15px #00bfff20;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 25px #00ffcc80;
+    }
+
+    .dual-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      width: 280px;
+      height: 160px;
+      overflow: hidden;
+    }
+
+    .dual-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.05rem;
+      transition: background 0.3s ease;
+    }
+
+    .dual-section:first-child {
+      background: #111;
+      color: #00ffcc;
+      border-right: 1px solid #00ffcc30;
+    }
+
+    .dual-section:last-child {
+      background: #111;
+      color: #ff6666;
+    }
+
+    .dual-section:hover {
+      filter: brightness(1.2);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Stock Animation Background -->
+  <canvas id="graph-bg"></canvas>
+
+  <!-- Header -->
+  <header>
+    Capita Dashboard
+    <div class="user-icon" onclick="window.location.href='profile.html'"></div>
+  </header>
+
+  <!-- Tagline -->
+  <div class="quote-banner">Indian Market at Your Fingertips</div>
+
+  <!-- Cards Section -->
+<div class="cards-container">
+
+  <!-- Buy/Sell Stocks (Unified) -->
+  <div class="card" onclick="location.href='trade.html'">
+    Buy / Sell Stocks
+  </div>
+
+  <!-- SIP Calculator -->
+  <div class="card" onclick="location.href='sip.html'">SIP Calculator</div>
+
+  <!-- Market Trends -->
+  <div class="card" onclick="alert('Coming soon')">Market Trends</div>
+
+</div>
+
+    <!-- Coming Soon -->
+  
+
+  <!-- Background Line Animation -->
+  <script>
+    const canvas = document.getElementById("graph-bg");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let points = [];
+    let spacing = 100;
+
+    for (let x = 0; x < canvas.width + spacing; x += spacing) {
+      let y = canvas.height / 2 + Math.random() * 100 - 50;
+      points.push({ x, y });
+    }
+
+    function drawGraph() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = '#00ffcc';
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#00bfff';
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    function animate() {
+      for (let i = 0; i < points.length; i++) {
+        points[i].y += Math.random() * 4 - 2;
+        points[i].x -= 0.5;
+        if (points[i].x < -spacing) {
+          points[i].x = canvas.width;
+          points[i].y = canvas.height / 2 + Math.random() * 100 - 50;
+        }
+      }
+      drawGraph();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
